@@ -1,48 +1,45 @@
-name: EUserv Auto Extend
-  
+name: 'EUserv Auto Extend'
+
 on:
+  workflow_dispatch:
   push:
-    branches: [ master ]
+    branches:
+      - main
   schedule:
     - cron: '50 0 * * *'
-      
 
 jobs:
-  build:
-
-    runs-on: ubuntu-18.04
-    strategy:
-      max-parallel: 5
-      matrix:
-        python-version: [3.7]
-        #python-version: [2.7, 3.5, 3.6, 3.7, 3.8]
-
+  auto_renew:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: 'Checkout codes'
+        uses: actions/checkout@v2
 
-    - name: 'Install dependencies'
-      run: |
-        python -m pip install --upgrade requests
-        python -m pip install --upgrade beautifulsoup4
-    - name: 'Auto_renew'
-      env:
-        USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD }}
-      run: python main.py
-    - name: log push  #获得自动部署的时间
-      run: | 
-        echo `date +"%Y-%m-%d %H:%M:%S"` begin > time.log
-    - name: Commit #上传到仓库
-      run: |
-        git config --global user.email AutoupdateRobot@email.com
-        git config --global user.name AutoupdateRobot
-        git add .
-        git commit -m "update new push" -a
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Set python'
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+
+      - name: 'Install dependencies'
+        run: |
+          python -m pip install --upgrade requests
+          python -m pip install --upgrade beautifulsoup4
+
+      - name: 'Auto_renew'
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: python main.py
+      - name: log push  #获得自动部署的时间
+        run: | 
+          echo `date +"%Y-%m-%d %H:%M:%S"` begin > time.log
+      - name: Commit #上传到仓库
+        run: |
+          git config --global user.email AutoupdateRobot@email.com
+          git config --global user.name AutoupdateRobot
+          git add .
+          git commit -m "update new push" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
