@@ -31,7 +31,8 @@ jobs:
         run: |
           git config --global user.email AutoupdateRobot@email.com
           git config --global user.name AutoupdateRobot
-          git pull
+          git fetch --all
+          git pull --all
           git add .
           git commit -m "update new push" -a
       - name: Push changes
