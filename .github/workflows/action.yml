@@ -24,15 +24,13 @@ jobs:
         run: |
           python -m pip install --upgrade requests
           python -m pip install --upgrade beautifulsoup4
-      - name: log push  #获得自动部署的时间
-        run: | 
-          rm -rf time.log
-          echo `date +"%Y-%m-%d %H:%M:%S"` begin > time.log
       - name: Commit #上传到仓库
         run: |
           git config --global user.email AutoupdateRobot@email.com
           git config --global user.name AutoupdateRobot
           git pull origin master --allow-unrelated-histories
+          rm -rf time.log
+          echo `date +"%Y-%m-%d %H:%M:%S"` begin > time.log
           git add .
           git commit -m "update new push" -a
       - name: Push changes
