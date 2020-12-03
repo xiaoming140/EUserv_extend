@@ -1,7 +1,6 @@
 name: 'EUserv Auto Extend'
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -28,7 +27,6 @@ jobs:
         run: |
           git config --global user.email AutoupdateRobot@email.com
           git config --global user.name AutoupdateRobot
-          git pull origin master --allow-unrelated-histories
           rm -rf time.log
           echo `date +"%Y-%m-%d %H:%M:%S"` begin > time.log
           git add .
