@@ -31,15 +31,15 @@ jobs:
         run: |
           git config --global user.email AutoupdateRobot@email.com
           git config --global user.name AutoupdateRobot
-          git fetch --all
-          git pull --all
+          git pull origin master --allow-unrelated-histories
           git add .
           git commit -m "update new push" -a
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-        
+          branch: ${{ github.ref }}
+          
       - name: 'Auto_renew'
         env:
           USERNAME: ${{ secrets.USERNAME }}
